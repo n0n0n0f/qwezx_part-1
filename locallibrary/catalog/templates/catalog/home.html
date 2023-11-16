@@ -1,24 +1,35 @@
-<!-- templates/catalog/home.html -->
-{% extends 'catalog/base_generic.html' %}
-
-{% block title %}Главная страница{% endblock %}
-
-{% block content %}
-  <h2>Главная страница</h2>
-
-  <h3>Последние выполненные заявки:</h3>
-  {% for request in completed_requests %}
-    <p>{{ request.title }} - {{ request.timestamp }}</p>
-    <!-- Добавьте другие поля заявки по вашему усмотрению -->
-  {% endfor %}
-
-  <h3>Заявок в работе: {{ in_progress_count }}</h3>
-  {% if user.is_authenticated %}
-    <p>Добро пожаловать, {{ user.username }}!</p>
- <a href="{% url 'logout' %}">Выйти</a>
-  {% else %}
-    <p>Пожалуйста, войдите в систему.</p>
-
-
-  {% endif %}
-{% endblock %}
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя страница</title>
+</head>
+<body>
+    <header>
+        <h1>Главная страница<h1>
+    </header>
+    <main>
+        <!-- Ваши данные из контекста -->
+        <div class="completed-requests">
+            <h2>Последние выполненные заявки:</h2>
+            {% for request in completed_requests %}
+                <p>{{ request.title }}</p>
+            {% endfor %}
+        </div>
+        <p>Количество заявок в работе: {{ in_progress_count }}</p>
+        <h2>Добро пожаловать, {{ user.username }}!</h2>
+        {% if user.is_authenticated %}
+  <!-- Отображение контента для авторизованного пользователя -->
+  <a href="{% url 'user_logout' %}">Выйти</a>
+{% else %}
+  <!-- Отображение контента для неавторизованного пользователя -->
+  <a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Зарегистрироваться</a>
+{% endif %}
+    </main>
+    <footer>
+        <!-- Ваш футер -->
+    </footer>
+</body>
+</html>

@@ -1,7 +1,12 @@
 from .forms import RegistrationForm
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from .models import DesignRequest
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 
 
 @login_required
@@ -15,7 +20,6 @@ def home(request):
     context = {
         'completed_requests': completed_requests,
         'in_progress_count': in_progress_count,
-        'user': request.user,  # Добавьте текущего пользователя в контекст
     }
 
     return render(request, 'catalog/home.html', context)
@@ -36,20 +40,12 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-# catalog/views.py
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-
-
 def user_logout(request):
     logout(request)
-    return redirect('home')  # Измените на ваше имя для главной страницы
+    return redirect('home')
 
 
-from django.shortcuts import redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
+from django.urls import reverse
 
 
 def user_login(request):
@@ -70,5 +66,4 @@ def user_login(request):
             messages.error(request, "Неправильный логин или пароль.")
     else:
         form = AuthenticationForm()
-
     return render(request, 'registration/login.html', {'form': form})

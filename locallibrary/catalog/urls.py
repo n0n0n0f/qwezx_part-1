@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
     path('', home, name='base_generic'),
     path('home/', home, name='home'),
+    path('logout/', user_logout, name='user_logout'),
 ]
 # Ваш проект/приложение/urls.py
 
