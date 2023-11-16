@@ -1,0 +1,24 @@
+<!-- templates/catalog/home.html -->
+{% extends 'catalog/base_generic.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+  <h2>Главная страница</h2>
+
+  <h3>Последние выполненные заявки:</h3>
+  {% for request in completed_requests %}
+    <p>{{ request.title }} - {{ request.timestamp }}</p>
+    <!-- Добавьте другие поля заявки по вашему усмотрению -->
+  {% endfor %}
+
+  <h3>Заявок в работе: {{ in_progress_count }}</h3>
+  {% if user.is_authenticated %}
+    <p>Добро пожаловать, {{ user.username }}!</p>
+ <a href="{% url 'logout' %}">Выйти</a>
+  {% else %}
+    <p>Пожалуйста, войдите в систему.</p>
+
+
+  {% endif %}
+{% endblock %}
