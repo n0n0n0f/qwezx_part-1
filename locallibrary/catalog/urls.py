@@ -1,32 +1,19 @@
-from django.urls import path
 from . import views
-
-urlpatterns = [
-    path('', views.home)
-]
-
-from django.urls import path
-from .views import register
-
-urlpatterns = [
-    # Другие маршруты...
-    path('register/', register, name='register'),
-]
-
-# catalog/urls.py
-from django.urls import path
 from .views import user_login
-
-urlpatterns = [
-    # Другие маршруты...
-    path('login/', user_login, name='login'),
-]
-
-# catalog/urls.py
-from django.urls import path
+from .views import register
 from .views import user_logout
+from .views import home
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
 
 urlpatterns = [
-    # Другие маршруты...
+    path('', views.home),
+    path('register/', register, name='register'),
+    path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
+    path('', home, name='base_generic'),
+    path('home/', home, name='home'),
 ]
+# Ваш проект/приложение/urls.py
+
+
