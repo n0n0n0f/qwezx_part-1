@@ -71,6 +71,7 @@ class DesignRequest(models.Model):
     category = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='design_photos/')
     timestamp = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()  # Добавлено поле описания
     STATUS_CHOICES = [
         ('New', 'Новая'),
         ('In Progress', 'Принято в работу'),
@@ -78,6 +79,14 @@ class DesignRequest(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # models.py
+
+    from django.db import models
+    from django.contrib.auth.models import User
+
+
+
+
 
     def __str__(self):
         return self.title
