@@ -1,13 +1,15 @@
+from django.contrib.auth.models import BaseUserManager, User
 from django.contrib.auth.validators import ASCIIUsernameValidator
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError('Этот email уже занят')
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
@@ -32,7 +34,6 @@ class CustomUser(AbstractUser):
         validators=[ASCIIUsernameValidator()],
         verbose_name='Username'
     )
-
     fio = models.CharField(
         max_length=255,
         validators=[fio_validator],
@@ -44,7 +45,8 @@ class CustomUser(AbstractUser):
         related_query_name='custom_user',
         blank=True,
         verbose_name='Группы',
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.'
+        help_text='Группы, к которым принадлежит этот пользователь. Пользователь получит все разрешения, '
+                  'предоставленные каждой из его групп..'
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
@@ -64,22 +66,25 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-# catalog/models.py
-from django.db import models
-from django.contrib.auth import get_user_model
-
-# catalog/models.py
-from django.db import models
-from django.contrib.auth.models import User
-
-
 class DesignRequest(models.Model):
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='design_photos/')
     timestamp = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=[('In Progress', 'In Progress'), ('Completed', 'Completed')])
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('New', 'Новая'),
+        ('In Progress', 'Принято в работу'),
+        ('Completed', 'Выполнено'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
