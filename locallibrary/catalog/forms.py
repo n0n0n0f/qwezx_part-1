@@ -24,7 +24,7 @@ class RegistrationForm(forms.ModelForm):
 class DesignRequestForm(forms.ModelForm):
     class Meta:
         model = DesignRequest
-        fields = ['title', 'category', 'photo']
+        fields = ['title', 'description', 'category', 'photo']
 
 
 class CategoryForm(forms.ModelForm):
