@@ -1,6 +1,7 @@
-# catalog/forms.py
-from django import forms
 from .models import CustomUser
+from .models import Category
+from django import forms
+from .models import DesignRequest
 
 
 class RegistrationForm(forms.ModelForm):
@@ -18,3 +19,15 @@ class RegistrationForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError('Пароли не совпадают.')
+
+
+class DesignRequestForm(forms.ModelForm):
+    class Meta:
+        model = DesignRequest
+        fields = ['title', 'category', 'photo']
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
