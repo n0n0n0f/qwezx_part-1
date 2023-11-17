@@ -54,7 +54,7 @@
         <h2>Добро пожаловать, {{ user.username }}!</h2>
         {% if user.is_authenticated %}
             <!-- Отображение контента для авторизованного пользователя -->
-           <a href="{% url 'logout' %}?next={{ request.path|urlencode }}">Выйти</a>
+          <a href="{% url 'logout' %}?next={{ request.path|urlencode }}">Выйти</a>
 
         {% else %}
             <!-- Отображение контента для неавторизованного пользователя -->
