@@ -1,0 +1,13 @@
+{% extends 'catalog/base_generic.html' %}
+
+{% block content %}
+  <h1>Редактирование дизайн запроса</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Согласиться с изменениями</button>
+  </form>
+
+  <a href="{% url 'home' %}">Отмена</a>
+{% endblock %}

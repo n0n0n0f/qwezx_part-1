@@ -1,0 +1,16 @@
+<!-- catalog/edit_design_request.html -->
+
+{% extends 'catalog/base_generic.html' %}
+
+
+{% block content %}
+  <h1>Создание дизайн запроса</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить изменения</button>
+  </form>
+
+  <a href="{% url 'view_own_requests' %}">Отмена</a>
+{% endblock %}
