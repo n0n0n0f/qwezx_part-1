@@ -1,0 +1,46 @@
+<!-- user_profile.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+</head>
+<body>
+    <header>
+        <h1>Личный кабинет пользователя</h1>
+    </header>
+    <main>
+        <h2>Информация о пользователе</h2>
+        <p>Имя пользователя: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+
+        <h2>Ваши заявки</h2>
+        <ul>
+            {% for request in user_requests %}
+                <li>
+                    <strong>Временная метка:</strong> {{ request.timestamp }}<br>
+                    <strong>Название:</strong> {{ request.title }}<br>
+                    <strong>Описание:</strong> {{ request.description }}<br>
+                    <strong>Категория:</strong> {{ request.category.name }}<br>
+                    <!-- Добавление изображения заявки -->
+                    <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
+                    <a href="{% url 'edit_design_request' request.id %}">Редактировать</a>
+                    <a href="{% url 'delete_design_request' request.id %}">Удалить</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2>Создать новую заявку</h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'create_design_request' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Создать заявку</button>
+        </form>
+    </main>
+    <footer>
+        <!-- Ваш футер -->
+    </footer>
+</body>
+</html>
