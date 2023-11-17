@@ -4,7 +4,7 @@ from django.template.context_processors import static
 
 from . import views
 from .views import user_login, create_design_request, view_own_requests, delete_design_request, change_status, \
-    add_category, manage_categories
+    add_category, manage_categories, user_profile, edit_design_request
 from .views import register
 from .views import user_logout
 from .views import home
@@ -24,9 +24,9 @@ urlpatterns = [
     path('manage_categories/', manage_categories, name='manage_categories'),
     path('add_category/', add_category, name='add_category'),
     path('view_own_requests/', view_own_requests, name='view_own_requests'),
+    path('user-profile/', user_profile, name='user_profile'),
+    path('', home, name='home'),
+    path('user-profile/', user_profile, name='user_profile'),
+    path('edit-design-request/<int:request_id>/',
+         edit_design_request, name='edit_design_request'),
 ]
-
-
-
-
-

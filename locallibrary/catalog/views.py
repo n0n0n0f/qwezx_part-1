@@ -122,8 +122,12 @@ from django.shortcuts import get_object_or_404
 @staff_member_required
 def change_status(request, request_id, new_status):
     design_request = get_object_or_404(DesignRequest, id=request_id)
-    design_request.status = new_status
-    design_request.save()
+
+    if design_request.status == 'New' and new_status in ['In Progress', 'Completed']:
+        design_request.status = new_status
+        design_request.save()
+        # Дополнительные действия, например, отправка уведомления
+
     return redirect('admin_home')
 
 
@@ -144,3 +148,102 @@ def add_category(request):
         form = CategoryForm()
 
     return render(request, 'catalog/add_category.html', {'form': form})
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def edit_design_request(request, request_id):
+    design_request = get_object_or_404(DesignRequest, id=request_id, user=request.user)
+
+    if request.method == 'POST':
+        form = DesignRequestForm(request.POST, request.FILES, instance=design_request)
+        if form.is_valid():
+            form.save()
+            return redirect('view_own_requests')
+    else:
+        form = DesignRequestForm(instance=design_request)
+
+    return render(request, 'catalog/edit_design_request.html', {'form': form, 'design_request': design_request})
+
+
+@staff_member_required
+def change_status(request, request_id, new_status):
+    design_request = get_object_or_404(DesignRequest, id=request_id)
+
+    if design_request.status == 'New' and new_status in ['In Progress', 'Completed']:
+        design_request.status = new_status
+        design_request.save()
+        # Дополнительные действия, например, отправка уведомления
+
+    return redirect('admin_home')
+
+
+@staff_member_required
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_categories')
+    else:
+        form = CategoryForm()
+
+    return render(request, 'catalog/add_category.html', {'form': form})
+
+
+@login_required
+def user_profile(request):
+    user_requests = DesignRequest.objects.filter(user=request.user)
+
+    return render(request, 'catalog/user_profile.html', {'user_requests': user_requests})
+
+
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def user_profile(request):
+    user_requests = DesignRequest.objects.filter(user=request.user).order_by('-timestamp')
+    context = {'user_requests': user_requests}
+    return render(request, 'catalog/user_profile.html', context)
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import DesignRequest
+
+
+@login_required
+def edit_design_request(request, request_id):
+    design_request = get_object_or_404(DesignRequest, id=request_id, user=request.user)
+
+    if request.method == 'POST':
+        form = DesignRequestForm(request.POST, request.FILES, instance=design_request)
+        if form.is_valid():
+            form.save()
+            return redirect('view_own_requests')
+    else:
+        form = DesignRequestForm(instance=design_request)
+
+    return render(request, 'catalog/edit_design_request.html', {'form': form, 'design_request': design_request})
+
+
+from django.shortcuts import render
+from .forms import DesignRequestForm
+
+
+@login_required
+def create_design_request(request):
+    if request.method == 'POST':
+        form = DesignRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            design_request = form.save(commit=False)
+            design_request.user = request.user
+            design_request.save()
+            return redirect('home')
+    else:
+        form = DesignRequestForm()
+
+    return render(request, 'catalog/create_design_request.html', {'form': form})
