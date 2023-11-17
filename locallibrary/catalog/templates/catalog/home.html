@@ -8,7 +8,10 @@
 </head>
 <body>
     <header>
-        <h1>Главная страница</h1>
+        <h1>Главная страница</h1><div>
+         <h2>Добро пожаловать, {{ user.username }}!</h2>
+    <a href="{% url 'user_profile' %}">Мой профиль</a>
+</div>
     </header>
     <main>
         <img src="https://avatars.mds.yandex.net/i?id=974d3fbe0496c8715e4141527bcc9830_l-5497593-images-thumbs&n=27&h=480&w=480"
@@ -49,16 +52,15 @@
         <h3>Количество заявок в статусе "Принято в работу": {{ in_progress_count }}</h3>
 
         <!-- Добавление ссылки на просмотр собственных заявок -->
-
-
-        <h2>Добро пожаловать, {{ user.username }}!</h2>
+        <a href="{% url 'view_own_requests' %}">Просмотреть мои заявки</a>
         {% if user.is_authenticated %}
             <!-- Отображение контента для авторизованного пользователя -->
-          <a href="{% url 'logout' %}?next={{ request.path|urlencode }}">Выйти</a>
+      <a href="{% url 'logout' %}?next={{ request.path|urlencode }}">Выйти</a>
 
         {% else %}
             <!-- Отображение контента для неавторизованного пользователя -->
             <a href="{% url 'login' %}?next={{ request.path|urlencode }}">Войти</a> | <a href="{% url 'register' %}">Зарегистрироваться</a>
+
         {% endif %}
     </main>
     <footer>
