@@ -22,6 +22,8 @@ class RegistrationForm(forms.ModelForm):
 
 
 class DesignRequestForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None)
+
     class Meta:
         model = DesignRequest
         fields = ['title', 'description', 'category', 'photo']
