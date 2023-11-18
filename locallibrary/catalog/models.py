@@ -2,8 +2,19 @@ from django.contrib.auth.models import BaseUserManager, User
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.conf import settings
+from django.db import models
+
+# models.py
+
+from django.db import models
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200, help_text='Enter a category for the design request')
+
+    def __str__(self):
+        return self.name
 
 
 class CustomUserManager(BaseUserManager):
@@ -68,7 +79,7 @@ class CustomUser(AbstractUser):
 
 class DesignRequest(models.Model):
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='design_photos/')
     timestamp = models.DateTimeField(auto_now_add=True)
     description = models.TextField()  # Добавлено поле описания
@@ -79,21 +90,6 @@ class DesignRequest(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # models.py
-
-    from django.db import models
-    from django.contrib.auth.models import User
-
-
-
-
 
     def __str__(self):
         return self.title
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
