@@ -1,10 +1,36 @@
+<!-- catalog/manage_categories.html -->
+
 {% extends 'catalog/base_generic.html' %}
 
 {% block content %}
   <h2>Управление категориями</h2>
   <ul>
     {% for category in categories %}
-      <li>{{ category.name }} - <a href="{% url 'delete_category' category.id %}">Удалить</a></li>
+      <li>
+        {{ category.name }}
+        <a href="#" onclick="deleteCategory({{ category.id }})">Удалить</a>
+      </li>
     {% endfor %}
   </ul>
+
+  <script>
+    function deleteCategory(categoryId) {
+      if (confirm("Вы уверены, что хотите удалить эту категорию?")) {
+        fetch(`/catalog/delete_category/${categoryId}/`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          location.reload();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    }
+  </script>
 {% endblock %}
