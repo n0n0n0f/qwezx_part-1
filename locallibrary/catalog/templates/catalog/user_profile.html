@@ -27,7 +27,7 @@
                     <!-- Добавление изображения заявки -->
                     <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
                     <a href="{% url 'edit_design_request' request.id %}">Редактировать</a>
-                    <a href="{% url 'delete_design_request' request.id %}">Удалить</a>
+                    <a href="{% url 'delete_design_request' request.id %}" onclick="return confirmDelete()">Удалить</a>
                 </li>
             {% endfor %}
         </ul>
@@ -37,10 +37,22 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Создать заявку</button>
+                <ul>
+            {% if user.is_staff %}
+                <li><a href="{% url 'add_category' %}">Добавить категорию</a></li>
+                <li><a href="{% url 'manage_categories' %}">Управление категориями</a></li>
+            {% endif %}
+        </ul>
         </form>
     </main>
     <footer>
         <!-- Ваш футер -->
     </footer>
+
+    <script>
+        function confirmDelete() {
+            return confirm("Вы уверены, что хотите удалить эту заявку?");
+        }
+    </script>
 </body>
 </html>
