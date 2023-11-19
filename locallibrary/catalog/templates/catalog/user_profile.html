@@ -24,8 +24,9 @@
                     <strong>Название:</strong> {{ request.title }}<br>
                     <strong>Описание:</strong> {{ request.description }}<br>
                     <strong>Категория:</strong> {{ request.category.name }}<br>
-                    <!-- Добавление изображения заявки -->
-                    <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
+                  {% if request.photo %}
+            <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
+        {% endif %}
                     <a href="{% url 'edit_design_request' request.id %}">Редактировать</a>
                     <a href="{% url 'delete_design_request' request.id %}" onclick="return confirmDelete()">Удалить</a>
                 </li>
