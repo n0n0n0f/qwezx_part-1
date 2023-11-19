@@ -1,14 +1,15 @@
-from django.conf import settings
 from django.contrib.auth.views import LogoutView
 from django.template.context_processors import static
-
+from django.views.static import serve
 from . import views
 from .views import user_login, create_design_request, view_own_requests, delete_design_request, change_status, \
     add_category, manage_categories, user_profile, edit_design_request, delete_category
 from .views import register
 from .views import user_logout
 from .views import home
+from django.conf import settings
 from django.urls import path
+
 
 urlpatterns = [
     path('', views.home),
@@ -38,3 +39,13 @@ urlpatterns = [
     path('delete_category/<int:category_id>/', delete_category, name='delete_category'),
 ]
 
+if settings.DEBUG:
+    urlpatterns += [
+        path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+    ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -25,8 +25,12 @@
                         <strong>Название:</strong> {{ request.title }}<br>
                         <strong>Категория:</strong> {{ request.category.name }}<br>
 
-                        <!-- Добавление изображения заявки -->
-                        <img src="{{ request.photo.url }}" alt="{{ request.title }}">
+
+               {% if request.photo %}
+
+            <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
+        {% endif %}
+
                     </li>
                 {% endfor %}
             </ul>
@@ -42,8 +46,9 @@
                         <strong>Название:</strong> {{ request.title }}<br>
                         <strong>Категория:</strong> {{ request.category.name }}<br>
 
-                        <!-- Добавление изображения заявки -->
-                        <img src="{{ request.photo.url }}" alt="{{ request.title }}">
+                        {% if request.photo %}
+            <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
+        {% endif %}
                     </li>
                 {% endfor %}
             </ul>

@@ -5,13 +5,9 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 
-# models.py
-
-from django.db import models
-
 
 class Category(models.Model):
-    name = models.CharField(max_length=200, help_text='Enter a category for the design request')
+    name = models.CharField(max_length=200, help_text='Введите новую категорию заявки')
 
     def __str__(self):
         return self.name
@@ -80,9 +76,9 @@ class CustomUser(AbstractUser):
 class DesignRequest(models.Model):
     title = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='design_photos/')
+    photo = models.ImageField(upload_to='design_request_photos/', blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    description = models.TextField()  # Добавлено поле описания
+    description = models.TextField()
     STATUS_CHOICES = [
         ('New', 'Новая'),
         ('In Progress', 'Принято в работу'),

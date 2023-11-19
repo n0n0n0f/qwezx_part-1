@@ -28,6 +28,10 @@ class DesignRequestForm(forms.ModelForm):
         model = DesignRequest
         fields = ['title', 'description', 'category', 'photo']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['photo'].required = True
+
 
 class CategoryForm(forms.ModelForm):
     class Meta:

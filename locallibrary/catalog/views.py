@@ -77,7 +77,7 @@ def create_design_request(request):
             design_request = form.save(commit=False)
             design_request.user = request.user
             design_request.save()
-            return redirect('home')
+            return redirect('design_requests')
     else:
         form = DesignRequestForm()
 
@@ -125,10 +125,9 @@ def change_status(request, request_id, new_status):
     return redirect('admin_home')
 
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import user_passes_test
 from .forms import CategoryForm
-from .models import Category, DesignRequest
 
 
 def is_staff(user):
@@ -179,7 +178,6 @@ def change_status(request, request_id, new_status):
     if design_request.status == 'New' and new_status in ['In Progress', 'Completed']:
         design_request.status = new_status
         design_request.save()
-        # Дополнительные действия, например, отправка уведомления
 
     return redirect('admin_home')
 
