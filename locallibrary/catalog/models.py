@@ -1,5 +1,6 @@
 from django.contrib.auth.models import BaseUserManager, User
 from django.contrib.auth.validators import ASCIIUsernameValidator
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -86,6 +87,18 @@ class DesignRequest(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        # Проверяем, изменился ли статус на "Выполнено" и есть ли изображение
+        if self.status == 'Выполнено' and not self.design_image:
+            raise ValidationError("При смене статуса на 'Выполнено' необходимо добавить изображение дизайна.")
+        super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        # Проверяем, изменился ли статус на "Принято в работу" и есть ли комментарий
+        if self.status == 'Принято в работу' and not self.comments:
+            raise ValidationError("При смене статуса на 'Принято в работу' необходимо указать комментарий.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from .models import CustomUser
 from .models import Category
 from django import forms
@@ -58,3 +60,22 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+
+class DesignRequestAdminForm(forms.ModelForm):
+    class Meta:
+        model = DesignRequest
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        design_image = cleaned_data.get('design_image')
+        comments = cleaned_data.get('comments')
+
+        if status == 'Completed' and not design_image:
+            raise ValidationError("При изменении статуса на 'Выполнено' необходимо прикрепить изображение дизайна.")
+        elif status == 'In Progress' and not comments:
+            raise ValidationError("При изменении статуса на 'Принято в работу' необходимо указать комментарий.")
+        elif status in ['In Progress', 'Completed']:
+            raise ValidationError("Смена статуса с 'Принято в работу' или 'Выполнено' невозможна.")

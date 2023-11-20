@@ -24,6 +24,7 @@
                     <strong>Название:</strong> {{ request.title }}<br>
                     <strong>Описание:</strong> {{ request.description }}<br>
                     <strong>Категория:</strong> {{ request.category.name }}<br>
+                    <strong>Статус:</strong> {{ request.status }}<br>
                   {% if request.photo %}
             <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
         {% endif %}

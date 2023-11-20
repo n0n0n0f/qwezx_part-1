@@ -24,7 +24,7 @@
                         <strong>Временная метка:</strong> {{ request.timestamp }}<br>
                         <strong>Название:</strong> {{ request.title }}<br>
                         <strong>Категория:</strong> {{ request.category.name }}<br>
-
+                        <strong>Статус:</strong> {{ request.status }}<br>
 
                {% if request.photo %}
 
@@ -45,7 +45,7 @@
                         <strong>Временная метка:</strong> {{ request.timestamp }}<br>
                         <strong>Название:</strong> {{ request.title }}<br>
                         <strong>Категория:</strong> {{ request.category.name }}<br>
-
+                        <strong>Статус:</strong> {{ request.status }}<br>
                         {% if request.photo %}
             <img src="{{ request.photo.url }}" alt="{{ request.title }}"><br>
         {% endif %}
