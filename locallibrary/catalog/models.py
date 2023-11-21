@@ -1,7 +1,7 @@
 from django.contrib.auth.models import BaseUserManager, User
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
@@ -87,6 +87,13 @@ class DesignRequest(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image_admin = models.ImageField(verbose_name="Фотография дизайна", upload_to='images_admin/',
+                                    validators=[
+                                        FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'bmp'])],
+                                    help_text="Указать фото дизайна при смене статуса на 'Выполнено'", blank=True)
+    comment_admin = models.TextField(verbose_name="Комментарий",
+                                     help_text="Указать комментарий при смене статуса на 'Принята в работу'",
+                                     blank=True)
 
     def save(self, *args, **kwargs):
         # Проверяем, изменился ли статус на "Выполнено" и есть ли изображение

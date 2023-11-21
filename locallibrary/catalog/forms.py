@@ -62,20 +62,18 @@ class CategoryForm(forms.ModelForm):
         fields = ['name']
 
 
-class DesignRequestAdminForm(forms.ModelForm):
-    class Meta:
-        model = DesignRequest
-        fields = '__all__'
+class ApplicationCheckForm(forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super().clean()
-        status = cleaned_data.get('status')
-        design_image = cleaned_data.get('design_image')
-        comments = cleaned_data.get('comments')
+        status = self.cleaned_data.get('status')
+        image_admin = self.cleaned_data.get('image_admin')
+        comment_admin = self.cleaned_data.get('comment_admin')
 
-        if status == 'Completed' and not design_image:
-            raise ValidationError("При изменении статуса на 'Выполнено' необходимо прикрепить изображение дизайна.")
-        elif status == 'In Progress' and not comments:
-            raise ValidationError("При изменении статуса на 'Принято в работу' необходимо указать комментарий.")
-        elif status in ['In Progress', 'Completed']:
-            raise ValidationError("Смена статуса с 'Принято в работу' или 'Выполнено' невозможна.")
+        if self.instance.status != 'New':
+            raise ValidationError("Статус можно менять только у новых заявок!")
+
+        if status == 'Completed' and not image_admin:
+            raise ValidationError("Заявке со статусом 'Выполнено' надо прикреплять фотографию дизайна!")
+
+        if status == 'In Progress' and not comment_admin:
+            raise ValidationError("Заявке со статусом 'Принята в работу' надо оставлять комментарий!")
