@@ -1,0 +1,16 @@
+version: '3.8'
+
+
+services:
+   web:
+       build:
+         dockerfile: ../docker/python/Dockerfile
+         context: ../../locallibrary
+
+       volumes:
+        - ../../design:/srv/www/locallibrary
+       expose:
+         - 8080
+       ports:
+         - 8080:8080
+       command: "gunicorn -c gunicorn.py locallibrary.wsgi"

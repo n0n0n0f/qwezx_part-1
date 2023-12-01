@@ -1,0 +1,37 @@
+<!-- catalog/templates/catalog/view_own_requests.html -->
+
+<h2>Ваши заявки</h2>
+
+<form method="get" action="{% url 'view_own_requests' %}">
+    <label for="status-filter">Фильтр по статусу:</label>
+    <select name="status" id="status-filter">
+        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Все</option>
+        <option value="New" {% if status_filter == 'New' %}selected{% endif %}>Новые</option>
+        <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>В работе</option>
+        <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Выполненные</option>
+    </select>
+    <button type="submit">Применить</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Временная метка</th>
+            <th>Название заявки</th>
+            <th>Описание заявки</th>
+            <th>Категория заявки</th>
+            <th>Статус заявки</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in user_requests %}
+            <tr>
+                <td>{{ request.timestamp }}</td>
+                <td>{{ request.title }}</td>
+                <td>{{ request.description }}</td>
+                <td>{{ request.category }}</td>
+                <td>{{ request.status }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
